@@ -1,0 +1,852 @@
+html<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Party Supply Store Calculator</title>
+    <style>
+        /* Isolated styles with specific selectors to prevent conflicts */
+        #partyCalculator {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        #partyCalculator h1, 
+        #partyCalculator h2, 
+        #partyCalculator h3 {
+            color: #8e44ad;
+            text-align: center;
+        }
+        
+        #partyCalculator .tab-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        #partyCalculator .tab-btn {
+            background: #f0f0f0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+        
+        #partyCalculator .tab-btn.active {
+            background: #8e44ad;
+            color: white;
+        }
+        
+        #partyCalculator .tab-btn:hover {
+            background: #e0e0e0;
+        }
+        
+        #partyCalculator .tab-btn.active:hover {
+            background: #7d3c98;
+        }
+        
+        #partyCalculator .tab-content {
+            display: none;
+        }
+        
+        #partyCalculator .tab-content.active {
+            display: block;
+        }
+        
+        #partyCalculator .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-between;
+        }
+        
+        #partyCalculator .selection-panel, 
+        #partyCalculator .cart-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        #partyCalculator .bundle-options, 
+        #partyCalculator .item-options {
+            margin-bottom: 20px;
+        }
+        
+        #partyCalculator .bundle, 
+        #partyCalculator .item {
+            background: #f0f0f0;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #partyCalculator .bundle:hover, 
+        #partyCalculator .item:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
+        }
+        
+        #partyCalculator .selected {
+            background: #d5e8f9;
+            border-left: 4px solid #3498db;
+        }
+        
+        #partyCalculator .price {
+            font-weight: bold;
+            float: right;
+            color: #27ae60;
+        }
+        
+        #partyCalculator .item-counter {
+            display: flex;
+            align-items: center;
+            float: right;
+        }
+        
+        #partyCalculator .counter-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        #partyCalculator .counter-btn:hover {
+            background: #2980b9;
+        }
+        
+        #partyCalculator .item-count {
+            margin: 0 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        #partyCalculator .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        #partyCalculator .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #8e44ad;
+            text-align: right;
+        }
+        
+        #partyCalculator .total {
+            font-size: 1.5em;
+            color: #8e44ad;
+            font-weight: bold;
+        }
+        
+        #partyCalculator .checkout-btn {
+            background: #8e44ad;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        #partyCalculator .checkout-btn:hover {
+            background: #7d3c98;
+            transform: translateY(-2px);
+        }
+        
+        #partyCalculator .bundle-contents {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        #partyCalculator .header-banner {
+            background: #8e44ad;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        #partyCalculator .header-banner h1 {
+            color: white;
+            margin: 0;
+        }
+        
+        #partyCalculator .header-banner p {
+            margin: 5px 0 0;
+        }
+        
+        #partyCalculator .scratch-category {
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #partyCalculator .scratch-item {
+            background: #f0f0f0;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #partyCalculator .cart-category {
+            background: #f0f0f0;
+            padding: 8px;
+            margin: 10px 0 5px 0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Main container with unique ID -->
+    <div id="partyCalculator">
+        <div class="header-banner">
+            <h1>Party Supply Store</h1>
+            <p>Select a bundle and add individual items for your perfect party!</p>
+        </div>
+        
+        <div class="container">
+            <div class="selection-panel">
+                <div class="tab-container">
+                    <button id="bundles-tab" class="tab-btn active">Choose a Bundle</button>
+                    <button id="scratch-tab" class="tab-btn">Build from Scratch</button>
+                </div>
+                
+                <div id="bundles-section" class="tab-content active">
+                    <div class="bundle-options">
+                        <h2>Step 1: Choose a Bundle</h2>
+                        <div class="bundle" data-price="250" data-id="basic">
+                            <span>Basic Party Package</span>
+                            <span class="price">$250</span>
+                            <div class="bundle-contents">
+                                Includes: 1 Tent (10x10), 4 Tables, 16 Chairs
+                            </div>
+                        </div>
+                        
+                        <div class="bundle" data-price="450" data-id="premium">
+                            <span>Premium Party Package</span>
+                            <span class="price">$450</span>
+                            <div class="bundle-contents">
+                                Includes: 1 Tent (20x20), 8 Tables, 32 Chairs, Basic Sound System
+                            </div>
+                        </div>
+                        
+                        <div class="bundle" data-price="750" data-id="deluxe">
+                            <span>Deluxe Event Package</span>
+                            <span class="price">$750</span>
+                            <div class="bundle-contents">
+                                Includes: 1 Tent (30x30), 12 Tables, 48 Chairs, Premium Sound System, Lighting Package
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="scratch-section" class="tab-content">
+                    <div class="scratch-options">
+                        <h2>Build Your Own Package</h2>
+                        
+                        <div class="scratch-category">
+                            <h3>Tents</h3>
+                            <div class="scratch-item" data-price="125" data-id="tent-small">
+                                <span>Small Tent (10x10)</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$125</span>
+                            </div>
+                            
+                            <div class="scratch-item" data-price="225" data-id="tent-medium">
+                                <span>Medium Tent (20x20)</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$225</span>
+                            </div>
+                            
+                            <div class="scratch-item" data-price="350" data-id="tent-large">
+                                <span>Large Tent (30x30)</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$350</span>
+                            </div>
+                        </div>
+                        
+                        <div class="scratch-category">
+                            <h3>Furniture</h3>
+                            <div class="scratch-item" data-price="30" data-id="scratch-table">
+                                <span>Table</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$30</span>
+                            </div>
+                            
+                            <div class="scratch-item" data-price="15" data-id="scratch-chair">
+                                <span>Chair</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$15</span>
+                            </div>
+                            
+                            <div class="scratch-item" data-price="40" data-id="scratch-tablecloth">
+                                <span>Table Cloth & Decor Set</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$40</span>
+                            </div>
+                        </div>
+                        
+                        <div class="scratch-category">
+                            <h3>Entertainment</h3>
+                            <div class="scratch-item" data-price="100" data-id="scratch-jumper">
+                                <span>Bouncy Castle</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$100</span>
+                            </div>
+                            
+                            <div class="scratch-item" data-price="150" data-id="scratch-slide">
+                                <span>Water Slide</span>
+                                <div class="item-counter">
+                                    <button class="counter-btn minus-btn">-</button>
+                                    <span class="item-count">0</span>
+                                    <button class="counter-btn plus-btn">+</button>
+                                </div>
+                                <span class="price">$150</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="item-options">
+                    <h2>Step 2: Add Individual Items</h2>
+                    
+                    <div class="item" data-price="15" data-id="chair">
+                        <span>Additional Chair</span>
+                        <div class="item-counter">
+                            <button class="counter-btn minus-btn">-</button>
+                            <span class="item-count">0</span>
+                            <button class="counter-btn plus-btn">+</button>
+                        </div>
+                        <span class="price">$15</span>
+                    </div>
+                    
+                    <div class="item" data-price="30" data-id="table">
+                        <span>Additional Table</span>
+                        <div class="item-counter">
+                            <button class="counter-btn minus-btn">-</button>
+                            <span class="item-count">0</span>
+                            <button class="counter-btn plus-btn">+</button>
+                        </div>
+                        <span class="price">$30</span>
+                    </div>
+                    
+                    <div class="item" data-price="100" data-id="jumper">
+                        <span>Bouncy Castle</span>
+                        <div class="item-counter">
+                            <button class="counter-btn minus-btn">-</button>
+                            <span class="item-count">0</span>
+                            <button class="counter-btn plus-btn">+</button>
+                        </div>
+                        <span class="price">$100</span>
+                    </div>
+                    
+                    <div class="item" data-price="75" data-id="lighting">
+                        <span>Additional Lighting</span>
+                        <div class="item-counter">
+                            <button class="counter-btn minus-btn">-</button>
+                            <span class="item-count">0</span>
+                            <button class="counter-btn plus-btn">+</button>
+                        </div>
+                        <span class="price">$75</span>
+                    </div>
+                    
+                    <div class="item" data-price="50" data-id="speaker">
+                        <span>Additional Speaker</span>
+                        <div class="item-counter">
+                            <button class="counter-btn minus-btn">-</button>
+                            <span class="item-count">0</span>
+                            <button class="counter-btn plus-btn">+</button>
+                        </div>
+                        <span class="price">$50</span>
+                    </div>
+                    
+                    <div class="item" data-price="120" data-id="projector">
+                        <span>Projector & Screen</span>
+                        <div class="item-counter">
+                            <button class="counter-btn minus-btn">-</button>
+                            <span class="item-count">0</span>
+                            <button class="counter-btn plus-btn">+</button>
+                        </div>
+                        <span class="price">$120</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cart-panel">
+                <h2>Your Party Setup</h2>
+                <div id="cartItems">
+                    <div class="cart-message">No items selected yet. Start by choosing a bundle!</div>
+                </div>
+                
+                <div class="total-section">
+                    <div>Subtotal: <span id="subtotal">$0.00</span></div>
+                    <div>Tax (7%): <span id="tax">$0.00</span></div>
+                    <div class="total">Total: <span id="total">$0.00</span></div>
+                    <button class="checkout-btn">Complete Reservation</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Safely get element
+        function $(selector) {
+            return document.querySelector(selector);
+        }
+        
+        function $$(selector) {
+            return document.querySelectorAll(selector);
+        }
+        
+        // Store the current state
+        var state = {
+            selectedBundle: null,
+            items: {},
+            scratchItems: {},
+            buildType: 'bundles', // 'bundles' or 'scratch'
+            subtotal: 0,
+            tax: 0,
+            total: 0
+        };
+        
+        // Function to switch between tabs
+        function showTab(tabName) {
+            // Update the buildType in state
+            state.buildType = tabName;
+            
+            // Reset selections when switching tabs
+            if (tabName === 'bundles') {
+                // We don't reset the bundle selection or additional items when switching back to bundles
+                $$('#partyCalculator .scratch-item .item-count').forEach(function(count) {
+                    count.textContent = '0';
+                });
+                state.scratchItems = {};
+            } else if (tabName === 'scratch') {
+                // Reset bundle selection when switching to scratch
+                $$('#partyCalculator .bundle').forEach(function(bundle) {
+                    bundle.classList.remove('selected');
+                });
+                state.selectedBundle = null;
+            }
+            
+            // Hide all tab contents
+            $$('#partyCalculator .tab-content').forEach(function(content) {
+                content.classList.remove('active');
+            });
+            
+            // Show the selected tab content
+            $('#' + tabName + '-section').classList.add('active');
+            
+            // Update tab button styles
+            $$('#partyCalculator .tab-btn').forEach(function(btn) {
+                btn.classList.remove('active');
+            });
+            $('#' + tabName + '-tab').classList.add('active');
+            
+            // Update cart display
+            updateCart();
+        }
+        
+        // Function to select a bundle
+        function selectBundle(bundleElement) {
+            // First, remove selected class from all bundles
+            $$('#partyCalculator .bundle').forEach(function(bundle) {
+                bundle.classList.remove('selected');
+            });
+            
+            // Add selected class to this bundle
+            bundleElement.classList.add('selected');
+            
+            // Update state
+            state.selectedBundle = {
+                id: bundleElement.getAttribute('data-id'),
+                name: bundleElement.querySelector('span:first-child').textContent,
+                price: parseFloat(bundleElement.getAttribute('data-price')),
+                contents: bundleElement.querySelector('.bundle-contents').textContent
+            };
+            
+            // Update cart display
+            updateCart();
+        }
+        
+        // Function to increment item count
+        function incrementItem(itemElement) {
+            var countElement = itemElement.querySelector('.item-count');
+            var count = parseInt(countElement.textContent);
+            count++;
+            countElement.textContent = count;
+            
+            // Update state
+            var itemId = itemElement.getAttribute('data-id');
+            if (!state.items[itemId]) {
+                state.items[itemId] = {
+                    id: itemId,
+                    name: itemElement.querySelector('span:first-child').textContent,
+                    price: parseFloat(itemElement.getAttribute('data-price')),
+                    count: 0
+                };
+            }
+            state.items[itemId].count = count;
+            
+            // Update cart display
+            updateCart();
+        }
+        
+        // Function to decrement item count
+        function decrementItem(itemElement) {
+            var countElement = itemElement.querySelector('.item-count');
+            var count = parseInt(countElement.textContent);
+            if (count > 0) {
+                count--;
+                countElement.textContent = count;
+                
+                // Update state
+                var itemId = itemElement.getAttribute('data-id');
+                state.items[itemId].count = count;
+                
+                // If count is 0, remove from state
+                if (count === 0) {
+                    delete state.items[itemId];
+                }
+                
+                // Update cart display
+                updateCart();
+            }
+        }
+        
+        // Function to increment scratch item count
+        function incrementScratchItem(itemElement) {
+            var countElement = itemElement.querySelector('.item-count');
+            var count = parseInt(countElement.textContent);
+            count++;
+            countElement.textContent = count;
+            
+            // Update state
+            var itemId = itemElement.getAttribute('data-id');
+            if (!state.scratchItems[itemId]) {
+                state.scratchItems[itemId] = {
+                    id: itemId,
+                    name: itemElement.querySelector('span:first-child').textContent,
+                    price: parseFloat(itemElement.getAttribute('data-price')),
+                    count: 0
+                };
+            }
+            state.scratchItems[itemId].count = count;
+            
+            // Update cart display
+            updateCart();
+        }
+        
+        // Function to decrement scratch item count
+        function decrementScratchItem(itemElement) {
+            var countElement = itemElement.querySelector('.item-count');
+            var count = parseInt(countElement.textContent);
+            if (count > 0) {
+                count--;
+                countElement.textContent = count;
+                
+                // Update state
+                var itemId = itemElement.getAttribute('data-id');
+                state.scratchItems[itemId].count = count;
+                
+                // If count is 0, remove from state
+                if (count === 0) {
+                    delete state.scratchItems[itemId];
+                }
+                
+                // Update cart display
+                updateCart();
+            }
+        }
+        
+        // Function to update cart display and calculations
+        function updateCart() {
+            var cartElement = $('#cartItems');
+            var cartHTML = '';
+            
+            // Reset calculations
+            state.subtotal = 0;
+            
+            if (state.buildType === 'bundles') {
+                // Add selected bundle to cart
+                if (state.selectedBundle) {
+                    cartHTML += '<div class="cart-item">' +
+                        '<div>' +
+                        '<strong>' + state.selectedBundle.name + '</strong>' +
+                        '<div class="bundle-contents">' + state.selectedBundle.contents + '</div>' +
+                        '</div>' +
+                        '<div>$' + state.selectedBundle.price.toFixed(2) + '</div>' +
+                        '</div>';
+                    state.subtotal += state.selectedBundle.price;
+                }
+                
+                // Add individual items to cart
+                for (var itemId in state.items) {
+                    var item = state.items[itemId];
+                    if (item.count > 0) {
+                        var itemTotal = item.price * item.count;
+                        cartHTML += '<div class="cart-item">' +
+                            '<div>' + item.name + ' x ' + item.count + '</div>' +
+                            '<div>$' + itemTotal.toFixed(2) + '</div>' +
+                            '</div>';
+                        state.subtotal += itemTotal;
+                    }
+                }
+                
+                // If cart is empty, show message
+                if (!state.selectedBundle && Object.keys(state.items).length === 0) {
+                    cartHTML = '<div class="cart-message">No items selected yet. Start by choosing a bundle!</div>';
+                }
+            } else if (state.buildType === 'scratch') {
+                // Add scratch items to cart
+                var hasScratchItems = false;
+                
+                // Group items by category
+                var categories = {
+                    'Tents': [],
+                    'Furniture': [],
+                    'Entertainment': []
+                };
+                
+                // Organize items by category based on ID prefix
+                for (var itemId in state.scratchItems) {
+                    var item = state.scratchItems[itemId];
+                    if (item.count > 0) {
+                        var itemTotal = item.price * item.count;
+                        state.subtotal += itemTotal;
+                        hasScratchItems = true;
+                        
+                        if (itemId.includes('tent')) {
+                            categories['Tents'].push({
+                                name: item.name,
+                                count: item.count,
+                                total: itemTotal
+                            });
+                        } else if (itemId.includes('table') || itemId.includes('chair')) {
+                            categories['Furniture'].push({
+                                name: item.name,
+                                count: item.count,
+                                total: itemTotal
+                            });
+                        } else if (itemId.includes('jumper') || itemId.includes('slide')) {
+                            categories['Entertainment'].push({
+                                name: item.name,
+                                count: item.count,
+                                total: itemTotal
+                            });
+                        }
+                    }
+                }
+                
+                // Add individual items from the "Add Individual Items" section as well
+                for (var itemId in state.items) {
+                    var item = state.items[itemId];
+                    if (item.count > 0) {
+                        var itemTotal = item.price * item.count;
+                        cartHTML += '<div class="cart-item">' +
+                            '<div>' + item.name + ' x ' + item.count + '</div>' +
+                            '<div>$' + itemTotal.toFixed(2) + '</div>' +
+                            '</div>';
+                        state.subtotal += itemTotal;
+                        hasScratchItems = true;
+                    }
+                }
+                
+                // Display items by category
+                for (var category in categories) {
+                    if (categories[category].length > 0) {
+                        cartHTML += '<div class="cart-category"><strong>' + category + '</strong></div>';
+                        categories[category].forEach(function(item) {
+                            cartHTML += '<div class="cart-item">' +
+                                '<div>' + item.name + ' x ' + item.count + '</div>' +
+                                '<div>$' + item.total.toFixed(2) + '</div>' +
+                                '</div>';
+                        });
+                    }
+                }
+                
+                // If no scratch items selected, show message
+                if (!hasScratchItems) {
+                    cartHTML = '<div class="cart-message">No items selected yet. Choose items to build your package!</div>';
+                }
+            }
+            
+            // Update cart HTML
+            cartElement.innerHTML = cartHTML;
+            
+            // Calculate tax and total
+            state.tax = state.subtotal * 0.07;
+            state.total = state.subtotal + state.tax;
+            
+            // Update displayed totals
+            $('#subtotal').textContent = '$' + state.subtotal.toFixed(2);
+            $('#tax').textContent = '$' + state.tax.toFixed(2);
+            $('#total').textContent = '$' + state.total.toFixed(2);
+        }
+        
+        // Function to simulate checkout
+        function checkout() {
+            if (state.buildType === 'bundles' && !state.selectedBundle) {
+                alert('Please select a bundle before checking out.');
+                return;
+            }
+            
+            if (state.buildType === 'scratch' && Object.keys(state.scratchItems).length === 0 && Object.keys(state.items).length === 0) {
+                alert('Please select at least one item before checking out.');
+                return;
+            }
+            
+            alert('Thank you for your reservation! Your total is $' + state.total.toFixed(2) + '. A confirmation email will be sent shortly.');
+            
+            // In a real application, you would send this data to a server
+            console.log('Checkout data:', state);
+            
+            // Reset the form
+            resetForm();
+        }
+        
+        // Function to reset the form
+        function resetForm() {
+            // Reset bundle selection
+            $$('#partyCalculator .bundle').forEach(function(bundle) {
+                bundle.classList.remove('selected');
+            });
+            
+            // Reset item counts for both regular items and scratch items
+            $$('#partyCalculator .item-count').forEach(function(countElement) {
+                countElement.textContent = '0';
+            });
+            
+            // Reset to bundles tab
+            showTab('bundles');
+            
+            // Reset state
+            state = {
+                selectedBundle: null,
+                items: {},
+                scratchItems: {},
+                buildType: 'bundles',
+                subtotal: 0,
+                tax: 0,
+                total: 0
+            };
+            
+            // Update cart display
+            updateCart();
+        }
+        
+        // Set up event listeners
+        
+        // Tab buttons
+        $('#bundles-tab').addEventListener('click', function() {
+            showTab('bundles');
+        });
+        
+        $('#scratch-tab').addEventListener('click', function() {
+            showTab('scratch');
+        });
+        
+        // Bundle selection
+        $$('#partyCalculator .bundle').forEach(function(bundle) {
+            bundle.addEventListener('click', function() {
+                selectBundle(this);
+            });
+        });
+        
+        // Item counter buttons
+        $$('#partyCalculator .item .plus-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                incrementItem(this.closest('.item'));
+            });
+        });
+        
+        $$('#partyCalculator .item .minus-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                decrementItem(this.closest('.item'));
+            });
+        });
+        
+        // Scratch item counter buttons
+        $$('#partyCalculator .scratch-item .plus-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                incrementScratchItem(this.closest('.scratch-item'));
+            });
+        });
+        
+        $$('#partyCalculator .scratch-item .minus-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                decrementScratchItem(this.closest('.scratch-item'));
+            });
+        });
+        
+        // Checkout button
+        $('.checkout-btn').addEventListener('click', checkout);
+        
+        // Initialize the cart
+        updateCart();
+        
+        // Let user know calculator is ready
+        console.log('Party Supply Calculator initialized successfully!');
+    });
+    </script>
+</body>
+</html>
