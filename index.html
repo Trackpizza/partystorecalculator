@@ -1,4 +1,4 @@
-html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,23 +156,6 @@ html<!DOCTYPE html>
             font-size: 1.5em;
             color: #8e44ad;
             font-weight: bold;
-        }
-        
-        #partyCalculator .checkout-btn {
-            background: #8e44ad;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1.1em;
-            margin-top: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        #partyCalculator .checkout-btn:hover {
-            background: #7d3c98;
-            transform: translateY(-2px);
         }
         
         #partyCalculator .bundle-contents {
@@ -437,9 +420,9 @@ html<!DOCTYPE html>
                 
                 <div class="total-section">
                     <div>Subtotal: <span id="subtotal">$0.00</span></div>
-                    <div>Tax (7%): <span id="tax">$0.00</span></div>
+                    <div>Tax (10%): <span id="tax">$0.00</span></div>
                     <div class="total">Total: <span id="total">$0.00</span></div>
-                    <button class="checkout-btn">Complete Reservation</button>
+                    <!-- Complete Reservation button removed -->
                 </div>
             </div>
         </div>
@@ -733,35 +716,14 @@ html<!DOCTYPE html>
             // Update cart HTML
             cartElement.innerHTML = cartHTML;
             
-            // Calculate tax and total
-            state.tax = state.subtotal * 0.07;
+            // Calculate tax and total (changed to 10%)
+            state.tax = state.subtotal * 0.10;
             state.total = state.subtotal + state.tax;
             
             // Update displayed totals
             $('#subtotal').textContent = '$' + state.subtotal.toFixed(2);
             $('#tax').textContent = '$' + state.tax.toFixed(2);
             $('#total').textContent = '$' + state.total.toFixed(2);
-        }
-        
-        // Function to simulate checkout
-        function checkout() {
-            if (state.buildType === 'bundles' && !state.selectedBundle) {
-                alert('Please select a bundle before checking out.');
-                return;
-            }
-            
-            if (state.buildType === 'scratch' && Object.keys(state.scratchItems).length === 0 && Object.keys(state.items).length === 0) {
-                alert('Please select at least one item before checking out.');
-                return;
-            }
-            
-            alert('Thank you for your reservation! Your total is $' + state.total.toFixed(2) + '. A confirmation email will be sent shortly.');
-            
-            // In a real application, you would send this data to a server
-            console.log('Checkout data:', state);
-            
-            // Reset the form
-            resetForm();
         }
         
         // Function to reset the form
@@ -838,8 +800,7 @@ html<!DOCTYPE html>
             });
         });
         
-        // Checkout button
-        $('.checkout-btn').addEventListener('click', checkout);
+        // Checkout button event listener removed
         
         // Initialize the cart
         updateCart();
